@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# macOS
+.DS_Store
+
+# Large corpus files
+data/wikipedia/psgs_w100.tsv.gz
+data/wikipedia/faiss_indexes/
+
+# Outputs
+outputs/
+
+# Local setup
+data_location.txt
+.env
