@@ -111,7 +111,6 @@ for i, example in enumerate(input_examples, start=1):
     )
 
     raw_output = response.output_text.strip()
-    print("RAW OUTPUT:", repr(raw_output))
     
     # Remove a code block if the model adds one
     if raw_output.startswith("```"):

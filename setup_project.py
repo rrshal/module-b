@@ -8,20 +8,14 @@ BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_DATA_DIR = BASE_DIR / "data" / "wikipedia"
 
 
-print()
 print("Module B setup")
-print("=" * 50)
-
-# Choose where to save the large Wikipedia files
 print()
-print("the wikipedia corpus and faiss indexes need about 65 GB.")
-print("they can be stored on this computer or on an external ssd")
-print()
-print("press Enter to use the default location:")
-print(DEFAULT_DATA_DIR)
+print("the wikipedia corpus and faiss indexes need about 65 gb")
+print("press Enter to store them inside the project")
+print("or enter another location like an external ssd")
 print()
 
-chosen_path = input("Data location: ").strip()
+chosen_path = input(f"Data location [{DEFAULT_DATA_DIR}]: ").strip()
 
 if chosen_path:
     data_dir = Path(chosen_path).expanduser()
@@ -31,11 +25,25 @@ else:
 data_dir.mkdir(parents=True, exist_ok=True)
 
 
-# Download the corpus and indexes
+# ask for the API key before the download starts
 print()
-print("Downloading Wikipedia data...")
-print("This can take a while and only needs to be done once")
+api_key = ""
+
+while not api_key:
+    api_key = getpass("enter your openai API key: ").strip()
+
+    if not api_key:
+        print("api key cannot be empty please try again")
+
+env_file = BASE_DIR / ".env"
+env_file.write_text(f"OPENAI_API_KEY={api_key}\n")
+
+print("api key saved")
 print()
+print("downloading wikipedia data...")
+print("this may take a while")
+print()
+
 
 snapshot_download(
     repo_id="rannnran/module-b-wikipedia",
@@ -44,26 +52,11 @@ snapshot_download(
 )
 
 
-# Save the data path for run_pipeline.py
 location_file = BASE_DIR / "data_location.txt"
 location_file.write_text(str(data_dir.resolve()))
 
 
-# Save the OpenAI key locally
 print()
-api_key = getpass("Enter your openai API key: ").strip()
-
-env_file = BASE_DIR / ".env"
-env_file.write_text(f"OPENAI_API_KEY={api_key}\n")
-
-
-print()
-print("=" * 50)
-print("Setup complete")
-print()
-print("Wikipedia data:")
+print("Setup complete.")
+print("Wikipedia data location:")
 print(data_dir.resolve())
-print()
-print("The pipeline will remember this location automatically.")
-print("Your API key was saved locally in .env.")
-print("=" * 50)
